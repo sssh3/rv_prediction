@@ -12,8 +12,10 @@ __pycache__/
 
 # Ignore model checkpoints and other large files
 checkpoints/
-models/
 
 # Ignore OS-specific files
 .DS_Store
 Thumbs.db
+
+# Ignore optuna logs
+src/tuning_logs/*
