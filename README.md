@@ -1,12 +1,7 @@
-# My ML Project
+# rv-prediction
 
 ## Overview
-A brief description of the project and its goals.
-
-## Project Structure
-Explain the directory structure.
+This project aims to predict CSI300 realized volatility with machine learning algorithms.
 
 ## Setup
-Instructions to set up the project, including installing dependencies:
-```sh
 pip install -r requirements.txt
