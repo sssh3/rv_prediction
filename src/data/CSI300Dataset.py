@@ -49,10 +49,11 @@ class CSI300Dataset(Dataset):
             target = self.data_y[index + self.args.seq_len + 1].flatten()
             return input, target
         
-        if self.args.model == 'LSTM':
+        else:
             input = np.concatenate([seq_x, seq_y], axis=1)
             target = self.data_y[index + self.args.seq_len + 1].flatten()
             return input, target
+    
     
     def __len__(self):
         return len(self.data_x) - self.args.seq_len

@@ -1,7 +1,7 @@
 # Ignore data files
-data/raw/*
-data/processed/*
-data/external/*
+# data/raw/*
+# data/processed/*
+# data/external/*
 
 # Ignore virtual environments
 venv/
@@ -18,4 +18,4 @@ checkpoints/
 Thumbs.db
 
 # Ignore optuna logs
-src/tuning_logs/*
+# src/tuning_logs/*

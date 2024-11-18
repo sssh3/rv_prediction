@@ -4,8 +4,8 @@ from src.utils.tools import get_device
 import torch
 
 
-model = 'LSTM'
-# ['FNN', 'LSTM']
+model = 'FNN'
+# ['FNN', 'LSTM', 'Transformer']
 
 if __name__ == '__main__':
     device = get_device()
@@ -17,4 +17,5 @@ if __name__ == '__main__':
     trainer = Trainer(args)
     trainer.train()
     trainer.evaluate()
+    trainer.test()
     
