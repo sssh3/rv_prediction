@@ -6,9 +6,9 @@ import torch
 import optuna
 import subprocess
 
-model = 'Transformer'
-# ['FNN', 'LSTM', 'Transformer']
-n_trails = 1
+model = 'iTransformer'
+# ['FNN', 'LSTM', 'Transformer', 'iTransformer']
+n_trails = 100
 
 def objective(trial):
     device = get_device()
@@ -17,18 +17,21 @@ def objective(trial):
     args.model = model
 
     if model == 'FNN':
+        args.learning_rate = trial.suggest_float('learning_rate', 1e-5, 1e-1, log=True)
         args.train_epochs = trial.suggest_int('train_epochs', 10, 100)
         args.hidden_size = trial.suggest_int('hidden_size', 10, 100)
-        args.dropout = trial.suggest_float('dropout', 0, 0.8)
+        args.dropout = trial.suggest_float('dropout', 0, 0.5)
         args.hidden_num = trial.suggest_int('hidden_num', 1, 5)
 
     if model == 'LSTM':
+        args.learning_rate = trial.suggest_float('learning_rate', 1e-5, 1e-1, log=True)
         args.train_epochs = trial.suggest_int('train_epochs', 10, 50)
         args.hidden_size = trial.suggest_int('hidden_size', 10, 100)
-        args.dropout = trial.suggest_float('dropout', 0, 0.8)
+        args.dropout = trial.suggest_float('dropout', 0, 0.5)
         args.hidden_num = trial.suggest_int('num_layers', 1, 5)
 
     if model == 'Transformer':
+        args.learning_rate = trial.suggest_float('learning_rate', 1e-5, 1e-1, log=True)
         args.train_epochs = trial.suggest_int('train_epochs', 10, 30)
         args.dropout = trial.suggest_float('dropout', 0, 0.5)
         
@@ -37,8 +40,21 @@ def objective(trial):
         possible_d_models = [d for d in range(8, 513) if d % 8 == 0]
         args.d_model = trial.suggest_categorical('d_model', possible_d_models)
 
-        args.num_encoder_layers = trial.suggest_int('num_encoder_layers', 1, 3)
+        args.num_encoder_layers = trial.suggest_int('num_encoder_layers', 1, 5)
         args.num_decoder_layers = trial.suggest_int('num_decoder_layers', 1, 3)
+        args.dim_feedforward = trial.suggest_int('dim_feedforward', 64, 1024)
+
+    if model == 'iTransformer':
+        args.learning_rate = trial.suggest_float('learning_rate', 1e-5, 1e-1, log=True)
+        args.train_epochs = trial.suggest_int('train_epochs', 10, 30)
+        args.dropout = trial.suggest_float('dropout', 0, 0.5)
+        
+        # d_model must be divisible by n_heads
+        args.n_head = trial.suggest_categorical('n_head', [2, 4, 8])
+        possible_d_models = [d for d in range(8, 513) if d % 8 == 0]
+        args.d_model = trial.suggest_categorical('d_model', possible_d_models)
+
+        args.num_encoder_layers = trial.suggest_int('num_encoder_layers', 1, 5)
         args.dim_feedforward = trial.suggest_int('dim_feedforward', 64, 1024)
         
 

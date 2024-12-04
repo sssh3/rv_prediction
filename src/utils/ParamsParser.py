@@ -12,7 +12,7 @@ class ParamsParser(argparse.ArgumentParser):
         self.add_argument('--drop_last', type=bool, default=True)
 
         if model == 'FNN':
-            self.add_argument('--learning_rate', type=int, default=0.01)
+            self.add_argument('--learning_rate', type=float, default=0.01)
             self.add_argument('--batch_size', type=int, default=16)
             self.add_argument('--train_epochs', type=int, default=45)
             self.add_argument('--hidden_size', type=int, default=44)
@@ -20,7 +20,7 @@ class ParamsParser(argparse.ArgumentParser):
             self.add_argument('--dropout', type=float, default=0.354369)
 
         if model == 'LSTM':
-            self.add_argument('--learning_rate', type=int, default=0.01)
+            self.add_argument('--learning_rate', type=float, default=0.01)
             self.add_argument('--batch_size', type=int, default=16)
             self.add_argument('--train_epochs', type=int, default=40)
             self.add_argument('--hidden_size', type=int, default=40)
@@ -28,16 +28,27 @@ class ParamsParser(argparse.ArgumentParser):
             self.add_argument('--dropout', type=float, default=0.501112)
 
         if model == 'Transformer':
-            self.add_argument('--learning_rate', type=int, default=0.001)
+            self.add_argument('--learning_rate', type=float, default=0.001)
             self.add_argument('--batch_size', type=int, default=16)
-            self.add_argument('--train_epochs', type=int, default=20)
+            self.add_argument('--train_epochs', type=int, default=23)
             possible_d_models = [d for d in range(8, 513) if d % 8 == 0]
-            self.add_argument('--d_model', type=int, choices=possible_d_models, default=64)
-            self.add_argument('--n_head', type=int, choices=[2, 4, 8], default=4)
-            self.add_argument('--num_encoder_layers', type=int, default=2)
-            self.add_argument('--num_decoder_layers', type=int, default=2)
-            self.add_argument('--dim_feedforward', type=int, default=128)
-            self.add_argument('--dropout', type=float, default=0.3)
+            self.add_argument('--d_model', type=int, choices=possible_d_models, default=384)
+            self.add_argument('--n_head', type=int, choices=[2, 4, 8], default=8)
+            self.add_argument('--num_encoder_layers', type=int, default=3)
+            self.add_argument('--num_decoder_layers', type=int, default=1)
+            self.add_argument('--dim_feedforward', type=int, default=117)
+            self.add_argument('--dropout', type=float, default=0.1)
+
+        if model == 'iTransformer':
+            self.add_argument('--learning_rate', type=float, default=0.001)
+            self.add_argument('--batch_size', type=int, default=16)
+            self.add_argument('--train_epochs', type=int, default=23)
+            possible_d_models = [d for d in range(8, 513) if d % 8 == 0]
+            self.add_argument('--d_model', type=int, choices=possible_d_models, default=384)
+            self.add_argument('--n_head', type=int, choices=[2, 4, 8], default=8)
+            self.add_argument('--num_encoder_layers', type=int, default=3)
+            self.add_argument('--dim_feedforward', type=int, default=117)
+            self.add_argument('--dropout', type=float, default=0.1)
 
 
     

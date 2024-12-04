@@ -5,6 +5,7 @@ from src.data.CSI300Dataset import CSI300Dataset
 from src.models.FNN import FNN
 from src.models.LSTM import LSTM
 from src.models.Transformer import Transformer
+from src.models.ITransformer import ITransformer
 from torch.utils.data import DataLoader, Subset
 import time
 import torch.nn.functional as F
@@ -49,16 +50,23 @@ class Trainer:
             input_len = len(self.train_set[0][0])
             self.model = FNN(input_len, self.args.hidden_size, self.args.hidden_num, 1, self.args.dropout).to(self.device)
 
-        if self.args.model == 'LSTM':
+        elif self.args.model == 'LSTM':
             input_len = len(self.train_set[0][0][0])
             self.model = LSTM(input_len, self.args.hidden_size, self.args.num_layers, 1, self.args.dropout).to(self.device)
 
-        if self.args.model == 'Transformer':
+        elif self.args.model == 'Transformer':
             input_len = len(self.train_set[0][0][0])
             self.model = Transformer(input_len, 1,
                                         self.args.d_model, self.args.n_head, 
                                         self.args.num_encoder_layers, self.args.num_decoder_layers,
                                         self.args.dim_feedforward, self.args.dropout).to(self.device)
+            
+        elif self.args.model == 'iTransformer':
+            seq_len = self.args.seq_len
+            input_len = len(self.train_set[0][0][0])
+            self.model = ITransformer(seq_len, input_len, 1, self.args.d_model,
+                                      self.args.n_head, self.args.num_encoder_layers,
+                                      self.args.dim_feedforward, self.args.dropout).to(self.device)
 
         
         self.optimizer = self._select_optimizer()
@@ -87,6 +95,7 @@ class Trainer:
                     outputs = self.model(inputs, tgt)
 
                     loss = self.criterion(outputs[:, -1, -1], targets[:, -1])
+                
                 else:
                     outputs = self.model(inputs)
                     loss = self.criterion(outputs, targets)

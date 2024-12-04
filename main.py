@@ -4,8 +4,8 @@ from src.utils.tools import get_device
 import torch
 
 
-model = 'Transformer'
-# ['FNN', 'LSTM', 'Transformer']
+model = 'iTransformer'
+# ['FNN', 'LSTM', 'Transformer', 'iTransformer']
 
 if __name__ == '__main__':
     device = get_device()

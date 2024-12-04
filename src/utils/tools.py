@@ -28,7 +28,9 @@ class MinMaxScaler:
         
 
 
-def get_device():
+def get_device(manual_input=''):
+    if manual_input != '':
+        return manual_input
     if torch.backends.mps.is_available():
         return 'mps'
     if torch.cuda.is_available():
