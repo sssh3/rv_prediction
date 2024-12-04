@@ -74,10 +74,19 @@ class Trainer:
                 
                 # Forward pass
                 if self.args.model == 'Transformer':
-                    src = inputs[:, :-1, :]  # shape: (batch_size, seq_length-1, features)
-                    tgt = inputs[:, 1:, :]  # shape: (batch_size, seq_length-1, features)
-                    outputs = self.model(src, tgt)
-                    loss = self.criterion(outputs[:, -1, -1], inputs[:, -1, -1])
+
+                    # Pad targets from (batch_size, 1) into (batch_size, 1, features) with zeros
+                    # padded = torch.zeros((self.args.batch_size, 1, len(self.train_set[0][0][0]))).to(self.device)
+                    # padded[:, :, 0] = targets
+
+                    # combined = torch.cat((inputs, padded), dim=1) # shape: (batch_size, seq_len+1, features)
+
+                    # src = combined[:, :-1, :]  # shape: (batch_size, seq_length, features)
+                    # tgt = combined[:, 1:, :]  # shape: (batch_size, seq_length, features)
+                    tgt = torch.zeros((self.args.batch_size, 1, len(self.train_set[0][0][0]))).to(self.device)
+                    outputs = self.model(inputs, tgt)
+
+                    loss = self.criterion(outputs[:, -1, -1], targets[:, -1])
                 else:
                     outputs = self.model(inputs)
                     loss = self.criterion(outputs, targets)
@@ -106,9 +115,8 @@ class Trainer:
             for inputs, targets in self.val_loader:
                 inputs, targets = inputs.to(self.device), targets.to(self.device)
                 if self.args.model == 'Transformer':
-                    src = inputs[:, 1:, :]
-                    tgt = src
-                    outputs = self.model(src, tgt)[:, -1, -1].unsqueeze(1)
+                    tgt = torch.zeros((self.args.batch_size, 1, len(self.train_set[0][0][0]))).to(self.device)
+                    outputs = self.model(inputs, tgt)[:, -1, -1].unsqueeze(1)
                 else:
                     outputs = self.model(inputs)
 
@@ -133,9 +141,8 @@ class Trainer:
             for inputs, targets in self.test_loader:
                 inputs, targets = inputs.to(self.device), targets.to(self.device)
                 if self.args.model == 'Transformer':
-                    src = inputs[:, 1:, :]
-                    tgt = src
-                    outputs = self.model(src, tgt)[:, -1, -1].unsqueeze(1)
+                    tgt = torch.zeros((self.args.batch_size, 1, len(self.train_set[0][0][0]))).to(self.device)
+                    outputs = self.model(inputs, tgt)[:, -1, -1].unsqueeze(1)
                 else:
                     outputs = self.model(inputs)
 

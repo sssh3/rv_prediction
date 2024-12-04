@@ -8,6 +8,7 @@ import subprocess
 
 model = 'Transformer'
 # ['FNN', 'LSTM', 'Transformer']
+n_trails = 1
 
 def objective(trial):
     device = get_device()
@@ -28,13 +29,18 @@ def objective(trial):
         args.hidden_num = trial.suggest_int('num_layers', 1, 5)
 
     if model == 'Transformer':
-        args.train_epochs = trial.suggest_int('train_epochs', 10, 50)
-        args.dropout = trial.suggest_float('dropout', 0, 0.8)
-        args.d_model = trial.suggest_int('d_model', 4, 128)
-        # args.n_head = trial.suggest_int('n_head', 2, 8)
+        args.train_epochs = trial.suggest_int('train_epochs', 10, 30)
+        args.dropout = trial.suggest_float('dropout', 0, 0.5)
+        
+        # d_model must be divisible by n_heads
+        args.n_head = trial.suggest_categorical('n_head', [2, 4, 8])
+        possible_d_models = [d for d in range(8, 513) if d % 8 == 0]
+        args.d_model = trial.suggest_categorical('d_model', possible_d_models)
+
         args.num_encoder_layers = trial.suggest_int('num_encoder_layers', 1, 3)
         args.num_decoder_layers = trial.suggest_int('num_decoder_layers', 1, 3)
-        args.dim_feedforward = trial.suggest_int('dim_feedforward', 32, 128)
+        args.dim_feedforward = trial.suggest_int('dim_feedforward', 64, 1024)
+        
 
 
     trainer = Trainer(args)
@@ -57,5 +63,6 @@ if __name__ == '__main__':
         storage=storage, 
         study_name=f'{model}_1',
         load_if_exists=True)
-    study.optimize(objective, n_trials=50, timeout=1200)
+    study.optimize(objective, n_trials=n_trails, timeout=36000)
+    print(study.best_params)
     
