@@ -6,7 +6,7 @@ class ParamsParser(argparse.ArgumentParser):
         self.add_argument('--device', type=str, default=device)
         
         
-        self.add_argument('--data', type=str, default='CSI300')
+        self.add_argument('--data', type=str, choices=['CSI300', 'SHCOMP', 'SZCOMP', 'SZSE-CN'], default='CSI300')
         self.add_argument('--freq', type=str, choices=['1d', '1w', '5m', '30m'], default='1d')
         self.add_argument('--seq_len', type=int, default=20)
         self.add_argument('--drop_last', type=bool, default=True)
@@ -40,15 +40,15 @@ class ParamsParser(argparse.ArgumentParser):
             self.add_argument('--dropout', type=float, default=0.1)
 
         if model == 'iTransformer':
-            self.add_argument('--learning_rate', type=float, default=0.001)
+            self.add_argument('--learning_rate', type=float, default=0.0009)
             self.add_argument('--batch_size', type=int, default=16)
-            self.add_argument('--train_epochs', type=int, default=23)
+            self.add_argument('--train_epochs', type=int, default=25)
             possible_d_models = [d for d in range(8, 513) if d % 8 == 0]
-            self.add_argument('--d_model', type=int, choices=possible_d_models, default=384)
-            self.add_argument('--n_head', type=int, choices=[2, 4, 8], default=8)
-            self.add_argument('--num_encoder_layers', type=int, default=3)
-            self.add_argument('--dim_feedforward', type=int, default=117)
-            self.add_argument('--dropout', type=float, default=0.1)
+            self.add_argument('--d_model', type=int, choices=possible_d_models, default=56)
+            self.add_argument('--n_head', type=int, choices=[2, 4, 8], default=2)
+            self.add_argument('--num_encoder_layers', type=int, default=4)
+            self.add_argument('--dim_feedforward', type=int, default=187)
+            self.add_argument('--dropout', type=float, default=0.2)
 
 
     

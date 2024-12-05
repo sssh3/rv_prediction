@@ -9,6 +9,7 @@ import subprocess
 model = 'iTransformer'
 # ['FNN', 'LSTM', 'Transformer', 'iTransformer']
 n_trails = 100
+study_name_postfix = '1'
 
 def objective(trial):
     device = get_device()
@@ -77,7 +78,7 @@ if __name__ == '__main__':
     study = optuna.create_study(
         direction='minimize', 
         storage=storage, 
-        study_name=f'{model}_1',
+        study_name=f'{model}_{study_name_postfix}',
         load_if_exists=True)
     study.optimize(objective, n_trials=n_trails, timeout=36000)
     print(study.best_params)

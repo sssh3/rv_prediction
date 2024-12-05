@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from src.data.CSI300Dataset import CSI300Dataset
+from src.data.StockDataset import StockDataset
 from src.models.FNN import FNN
 from src.models.LSTM import LSTM
 from src.models.Transformer import Transformer
@@ -19,7 +19,7 @@ class Trainer:
 
 
     def _read_data(self):
-        dataset = CSI300Dataset(self.args)
+        dataset = StockDataset(self.args)
 
         total_len = len(dataset)
         train_size = int(0.7 * total_len)

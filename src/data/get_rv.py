@@ -4,13 +4,13 @@ import numpy as np
 
 cwd = Path.cwd()
 
-def get_rv():
+def get_rv(data_file_name):
     '''
     calculate RV for [5m, 30m, 1d, 1w] and save them in data/processed
     '''
     intervals = ['5m', '30m', '1d', '1w']
 
-    df = pl.read_csv('data/raw/CSI300.csv', schema_overrides={'':pl.Datetime})
+    df = pl.read_csv('data/raw/' + data_file_name + '.csv', schema_overrides={'':pl.Datetime})
     df = df.rename({'':'timestamp'})
 
     # group by 5m
@@ -42,4 +42,4 @@ def get_rv():
         ])
 
         # save as csv
-        processed_df.write_csv(f'data/processed/CSI300_{interval}.csv')
+        processed_df.write_csv(f'data/processed/' + data_file_name + f'_{interval}.csv')
