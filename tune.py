@@ -9,8 +9,9 @@ import subprocess
 model = 'iTransformer'
 # ['FNN', 'LSTM', 'Transformer', 'iTransformer']
 n_trails = 0
-study_name_postfix = '1'
-# '1' -> the first study
+study_name_postfix = '100'
+# '1' -> the first study, seq_len == 20
+# '100' -> seq_len == 100
 
 def objective(trial):
     device = get_device()
@@ -48,7 +49,7 @@ def objective(trial):
 
     if model == 'iTransformer':
         args.learning_rate = trial.suggest_float('learning_rate', 1e-5, 1e-1, log=True)
-        args.train_epochs = trial.suggest_int('train_epochs', 10, 30)
+        args.train_epochs = trial.suggest_int('train_epochs', 10, 40)
         args.dropout = trial.suggest_float('dropout', 0, 0.5)
         
         # d_model must be divisible by n_heads

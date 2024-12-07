@@ -10,6 +10,7 @@ class MinMaxScaler:
     def fit(self, data):
         self.max = data.max(0)
         self.min = data.min(0)
+        print("original scale:", self.max - self.min)
 
     def transform(self, data):
         return (self.max - data) / (self.max - self.min) * (self.upper - self.lower) + self.lower

@@ -59,8 +59,9 @@ class Transformer(nn.Module):
         
         src = self.positional_encoding(src)
         tgt = self.positional_encoding(tgt)
-        
+
         output = self.transformer(src, tgt)
         output = self.output_layer(output)
+        raise KeyboardInterrupt
         
         return output
